@@ -1,5 +1,5 @@
 {
-  "name": "The Master Ingest V31.60: [YESTERDAY_SNIPER_ONLY]",
+  "name": "The Master Ingest V31.61: [TITAN_AWAKENING_STRIKE]",
   "nodes": [
     {
       "parameters": {
@@ -90,14 +90,41 @@
     },
     {
       "parameters": {
-        "jsCode": "// 🔪 THE CHOPPER V31.60: PRECISION TIME PARSER\nconst items = $input.all();\nconst resultsMap = new Map(); \n\nfor (const item of items) {\n    const rawResponse = item.json;\n    const conversations = rawResponse.data || (rawResponse.messages ? [rawResponse] : []);\n    \n    for (const conv of conversations) {\n        const messages = conv.messages?.data || [];\n        for (const msg of messages) {\n            const text = (msg.message || \"\").trim();\n            if (text.includes(\"ขอบคุณ\") || text.length < 5) continue;\n\n            const phoneMatch = text.match(/0\\d{1,2}-?\\d{3}-?\\d{3,4}/) || text.match(/\\b0\\d{9}\\b/);\n            if (phoneMatch) {\n                const phone = phoneMatch[0].replace(/[^\\d]/g, '').replace(/^66/, '0');\n                \n                // สกัดพิกัดทองคำ\n                const priceMatch = text.match(/(?:ยอด|COD|ราคา|จ่าย|ครี)\\s*[:=-]?\\s*([\\d,.]+)/i);\n                let price = priceMatch ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0;\n\n                if (phone.length >= 9) {\n                    resultsMap.set(phone, {\n                        json: {\n                            phone_number: String(phone),\n                            recipient_name: String(msg.from?.name || \"ลูกค้า VVIP\"),\n                            cod_amount: Number(price),\n                            status: \"Yesterday_Batch\",\n                            created_at: msg.created_time\n                        }\n                    });\n                }\n            }\n        }\n    }\n}\nreturn Array.from(resultsMap.values());"
+        "jsCode": "/**\n * 🔪 THE CHOPPER V31.61: TITAN AWAKENING\n * ยุทธศาสตร์: สกัดพิกัด และระบุตารางเป้าหมายแยกตามแบรนด์\n */\nconst items = $input.all();\nconst resultsMap = new Map(); \n\nfor (const item of items) {\n    const rawResponse = item.json;\n    const conversations = rawResponse.data || (rawResponse.messages ? [rawResponse] : []);\n    \n    // 🚩 ระบุ Identity จากการเรียก API (ใช้พิกัด URL เป็นตัวจำแนก)\n    let targetTable = \"st_order\"; \n    if (item.pairedItem?.node === \"FB บีบี 💜 (สอยเฉพาะเมื่อวาน)\") targetTable = \"orders\";\n\n    for (const conv of conversations) {\n        const messages = conv.messages?.data || [];\n        for (const msg of messages) {\n            const text = (msg.message || \"\").trim();\n            if (text.includes(\"ขอบคุณ\") || text.length < 5) continue;\n\n            const phoneMatch = text.match(/0\\d{1,2}-?\\d{3}-?\\d{3,4}/) || text.match(/\\b0\\d{9}\\b/);\n            if (phoneMatch) {\n                const phone = phoneMatch[0].replace(/[^\\d]/g, '').replace(/^66/, '0');\n                \n                // 💰 สกัดพิกัดยอดเงิน\n                const priceMatch = text.match(/(?:ยอด|COD|ราคา|จ่าย|ครี)\\s*[:=-]?\\s*([\\d,.]+)/i);\n                let price = priceMatch ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0;\n\n                if (phone.length >= 9) {\n                    resultsMap.set(phone, {\n                        json: {\n                            target_table: targetTable,\n                            phone_number: String(phone),\n                            recipient_name: String(msg.from?.name || \"ลูกค้า VVIP\"),\n                            cod_amount: Number(price),\n                            status: \"Yesterday_Strike\",\n                            created_at: msg.created_time || new Date().toISOString()\n                        }\n                    });\n                }\n            }\n        }\n    }\n}\nreturn Array.from(resultsMap.values());"
       },
       "id": "code-chopper",
-      "name": "The Chopper V31.60",
+      "name": "The Chopper V31.61",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://nlgecesyjcrrqwiitlyt.supabase.co/rest/v1/{{ $json.target_table }}?on_conflict=phone_number",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZ2VjZXN5amNycnF3aWl0bHl0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDE3OTA3OSwiZXhwIjoyMDg5NzU1MDc5fQ.hR2g1HDcT47bBz-jqdyvC946EzPEloQOuIgQqTcOPNM" },
+            { "name": "Authorization", "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZ2VjZXN5amNycnF3aWl0bHl0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDE3OTA3OSwiZXhwIjoyMDg5NzU1MDc5fQ.hR2g1HDcT47bBz-jqdyvC946EzPEloQOuIgQqTcOPNM" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "resolution=merge-duplicates" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone_number\": \"{{ $json.phone_number }}\",\n  \"recipient_name\": \"{{ $json.recipient_name }}\",\n  \"cod_amount\": {{ $json.cod_amount }},\n  \"status\": \"{{ $json.status }}\",\n  \"created_at\": \"{{ $json.created_at }}\"\n}",
+        "options": {}
+      },
+      "id": "supabase-titan-sync",
+      "name": "Supabase Titan Sync",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        850,
         300
       ]
     }
@@ -135,6 +162,17 @@
         [
           {
             "node": "code-chopper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "code-chopper": {
+      "main": [
+        [
+          {
+            "node": "supabase-titan-sync",
             "type": "main",
             "index": 0
           }

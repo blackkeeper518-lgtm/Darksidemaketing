@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITAN MATRIX CORE V.76 - NEURAL SHOGUN REFINED</title>
+    <title>TITAN MATRIX CORE V.78 - NEURAL COMMAND STABLE</title>
     
     <!-- ⚡ HIGH-POWERED NEURAL LIBRARIES (CDNs) -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -39,7 +39,8 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const {manualFirebaseConfig} = React;
+        // --- ⚙️ REACT ENGINE HOOKS ---
+        const { manualFirebaseConfig } = React;
 
         // --- 🛡️ CONFIGURATION GATEWAY ---
         // จอมทัพครับ! ก๊อปปี้รหัส Firebase Config มาวางในปีกกาด้านล่างนี้ได้เลยครับ
@@ -81,7 +82,11 @@
                     containerRef.current.innerHTML = `<i data-lucide="${name}"></i>`;
                     window.lucide.createIcons({
                         node: containerRef.current,
-                        attrs: { class: className, stroke: color, "stroke-width": 2 }
+                        attrs: { 
+                            class: className, 
+                            stroke: color, 
+                            "stroke-width": 2 
+                        }
                     });
                 }
             }, [name, className, color]);
@@ -167,7 +172,11 @@
                 const db = firebase.firestore();
                 try {
                     await db.collection('artifacts').doc(appId).collection('public').doc('data').collection(theme.table).doc(id)
-                        .update({ psid: psidInput.trim(), strike_status: 'ready', updated_at: firebase.firestore.FieldValue.serverTimestamp() });
+                        .update({ 
+                            psid: psidInput.trim(), 
+                            strike_status: 'ready', 
+                            updated_at: firebase.firestore.FieldValue.serverTimestamp() 
+                        });
                     setEditingId(null);
                     setPsidInput('');
                 } catch (err) { console.error("Target Lock Error", err); }
@@ -264,7 +273,7 @@
                                     </div>
                                     <div className="grid grid-cols-2 gap-6 font-black uppercase italic tracking-tighter text-white/60">
                                         <div className="glass p-8 border-l-8 border-green-500 bg-green-500/5 shadow-2xl flex justify-between items-center">
-                                            <div><span className="text-[10px] opacity-30 block uppercase tracking-widest">Protocol</span><div className="text-3xl mt-1">V.76 READY</div></div>
+                                            <div><span className="text-[10px] opacity-30 block uppercase tracking-widest">Protocol</span><div className="text-3xl mt-1">V.78 READY</div></div>
                                             <SafeIcon name="shield-check" className="w-10 h-10 opacity-20" />
                                         </div>
                                         <div className="glass p-8 border-l-8 border-red-600 bg-red-600/5 shadow-2xl flex justify-between items-center">
@@ -328,7 +337,7 @@
                         <div className="flex items-center gap-24 whitespace-nowrap animate-ticker px-12 text-white/40">
                             {[1,2,3,4,5].map(i => (
                                 <div key={i} className="flex items-center gap-12">
-                                    <span className="text-[11px] font-black uppercase tracking-[0.6em] text-purple-400 matrix-text">SHADOW PROTOCOL // V.76 ACTIVE // LIVE SIGNAL // {brand} EMPIRE</span>
+                                    <span className="text-[11px] font-black uppercase tracking-[0.6em] text-purple-400 matrix-text">SHADOW PROTOCOL // V.78 ACTIVE // LIVE SIGNAL // {brand} EMPIRE</span>
                                     <SafeIcon name="zap" className="w-4 h-4" color="#facc15" />
                                     <span className="text-[11px] font-black uppercase tracking-[0.6em]">ARMED: {stats.count} | TARGETS READY: {stats.ready} | REVENUE: ฿{stats.total.toLocaleString()}</span>
                                     <SafeIcon name="shield-check" className="w-4 h-4" color="#22c55e" />

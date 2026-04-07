@@ -4,14 +4,21 @@
     {
       "parameters": {
         "rule": {
-          "interval": [{ "triggerAtMinute": 1 }]
+          "interval": [
+            {
+              "triggerAtMinute": 1
+            }
+          ]
         }
       },
       "id": "schedule-trigger",
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.1,
-      "position": [100, 300]
+      "position": [
+        100,
+        300
+      ]
     },
     {
       "parameters": {
@@ -19,10 +26,22 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "fields", "value": "messages{message,from,created_time},labels,is_starred" },
-            { "name": "limit", "value": "250" },
-            { "name": "since", "value": "yesterday" }, 
-            { "name": "access_token", "value": "EAANrFu3KNSoBRNhzRx7z7RR04Lm4MZAaUDdeAS8dhawDofNQ3EBiD98ZAie9ddPzOqlAqGJX0AMr8RhooHBIHs21QzD2VIr07Loc8pKBaYnAR8WxzZA4og3z3A3Js8F9eoip23LsjKINv55qtliQFggXyLfZCyGyAanl8hNTk4sZBYQKqNVzPL14RkdVDMfkwvAPxQsPdjc5b5ZATq00MyMVXxSUpDOZAFZCJlJOYQy8F1CNg5AF4DmWGk3pSAZDZD" }
+            {
+              "name": "fields",
+              "value": "messages{message,from,created_time},labels,is_starred"
+            },
+            {
+              "name": "limit",
+              "value": "250"
+            },
+            {
+              "name": "since",
+              "value": "yesterday"
+            },
+            {
+              "name": "access_token",
+              "value": "EAANrFu3KNSoBRNhzRx7z7RR04Lm4MZAaUDdeAS8dhawDofNQ3EBiD98ZAie9ddPzOqlAqGJX0AMr8RhooHBIHs21QzD2VIr07Loc8pKBaYnAR8WxzZA4og3z3A3Js8F9eoip23LsjKINv55qtliQFggXyLfZCyGyAanl8hNTk4sZBYQKqNVzPL14RkdVDMfkwvAPxQsPdjc5b5ZATq00MyMVXxSUpDOZAFZCJlJOYQy8F1CNg5AF4DmWGk3pSAZDZD"
+            }
           ]
         }
       },
@@ -30,7 +49,10 @@
       "name": "FB สิงโต 🦁 (สอยเฉพาะเมื่อวาน)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [350, 150]
+      "position": [
+        350,
+        150
+      ]
     },
     {
       "parameters": {
@@ -38,10 +60,22 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "fields", "value": "messages{message,from,created_time},labels,is_starred" },
-            { "name": "limit", "value": "250" },
-            { "name": "since", "value": "yesterday" },
-            { "name": "access_token", "value": "EAANrFu3KNSoBRGVPs7N3ZApuQcqu7QvFQS78ydlDyvf0W9rZBVWPB1uxXbsZC1Ut5iRzYZBr7tywPDvZCqTlKWpGnO6ZA2ryZBAFzPqyxZCD9ayPReORF6vxc1DcZARYahiOLugOtH72XyZAJxUmTwcN5kSBv4mFLgKxlcxE3dD8BGr09KK8STL3eiZAMn0LYHK1TnBT4RBV3mHGZC858d1jvvfqIVfQ9kfJteViUYhSeZB6f9aSz9lUULHYy5uhKLRy7iZCHBoHz0l8abp8CMbKDmZBZBOd0Uxmbm0L" }
+            {
+              "name": "fields",
+              "value": "messages{message,from,created_time},labels,is_starred"
+            },
+            {
+              "name": "limit",
+              "value": "250"
+            },
+            {
+              "name": "since",
+              "value": "yesterday"
+            },
+            {
+              "name": "access_token",
+              "value": "EAANrFu3KNSoBRGVPs7N3ZApuQcqu7QvFQS78ydlDyvf0W9rZBVWPB1uxXbsZC1Ut5iRzYZBr7tywPDvZCqTlKWpGnO6ZA2ryZBAFzPqyxZCD9ayPReORF6vxc1DcZARYahiOLugOtH72XyZAJxUmTwcN5kSBv4mFLgKxlcxE3dD8BGr09KK8STL3eiZAMn0LYHK1TnBT4RBV3mHGZC858d1jvvfqIVfQ9kfJteViUYhSeZB6f9aSz9lUULHYy5uhKLRy7iZCHBoHz0l8abp8CMbKDmZBZBOd0Uxmbm0L"
+            }
           ]
         }
       },
@@ -49,7 +83,10 @@
       "name": "FB บีบี 💜 (สอยเฉพาะเมื่อวาน)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [350, 350]
+      "position": [
+        350,
+        350
+      ]
     },
     {
       "parameters": {
@@ -59,12 +96,50 @@
       "name": "The Chopper V31.60",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [600, 300]
+      "position": [
+        600,
+        300
+      ]
     }
   ],
   "connections": {
-    "schedule-trigger": { \"main\": [ [ { \"node\": \"fb-fetch-1\", \"type\": \"main\", \"index\": 0 }, { \"node\": \"fb-fetch-2\", \"type\": \"main\", \"index\": 0 } ] ] },
-    "fb-fetch-1": { \"main\": [ [ { \"node\": \"code-chopper\", \"type\": \"main\", \"index\": 0 } ] ] },
-    "fb-fetch-2": { \"main\": [ [ { \"node\": \"code-chopper\", \"type\": \"main\", \"index\": 0 } ] ] }
+    "schedule-trigger": {
+      "main": [
+        [
+          {
+            "node": "fb-fetch-1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "fb-fetch-2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fb-fetch-1": {
+      "main": [
+        [
+          {
+            "node": "code-chopper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fb-fetch-2": {
+      "main": [
+        [
+          {
+            "node": "code-chopper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   }
 }

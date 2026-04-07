@@ -1,183 +1,269 @@
-{
-  "name": "The Master Ingest V31.61: [TITAN_AWAKENING_STRIKE]",
-  "nodes": [
-    {
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "triggerAtMinute": 1
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN MATRIX CORE V.86 - THE UNSTOPPABLE</title>
+    
+    <!-- ⚡ HIGH-POWERED NEURAL LIBRARIES -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #010102; color: #f1f5f9; margin: 0; overflow-x: hidden; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .nebula { position: fixed; inset: 0; pointer-events: none; z-index: 0; transition: background 1.5s ease; }
+        .glass { background: rgba(8, 8, 12, 0.95); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.5rem; }
+        .matrix-text { text-shadow: 0 0 15px currentColor; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .animate-ticker { animation: ticker 25s linear infinite; }
+        .radar-pulse { animation: pulse-red 2s infinite ease-out; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // ปิดล้อมตัวแปรทั้งหมดไว้ใน IIFE เพื่อป้องกันการ Redeclare
+        (function() {
+            const { useState, useEffect, useMemo, useRef } = React;
+
+            // --- 🛡️ CONFIGURATION GATEWAY (V.86 - THE UNSTOPPABLE) ---
+            const manualFirebaseConfig = {
+                apiKey: "วาง API Key ที่นี่", 
+                authDomain: "your-app.firebaseapp.com",
+                projectId: "your-app-id",
+                storageBucket: "your-app.appspot.com",
+                messagingSenderId: "...",
+                appId: "..."
+            };
+
+            const config = (manualFirebaseConfig.apiKey && manualFirebaseConfig.apiKey !== "วาง API Key ที่นี่") 
+                ? manualFirebaseConfig 
+                : JSON.parse(window.__firebase_config || '{}');
+
+            const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'darkside-bb-v4';
+
+            // Initialize 
+            if (config.apiKey && !firebase.apps.length) {
+                firebase.initializeApp(config);
             }
-          ]
-        }
-      },
-      "id": "schedule-trigger",
-      "name": "Schedule Trigger",
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.1,
-      "position": [
-        100,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "url": "https://graph.facebook.com/v21.0/148670205004124/conversations",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "fields",
-              "value": "messages{message,from,created_time},labels,is_starred"
-            },
-            {
-              "name": "limit",
-              "value": "250"
-            },
-            {
-              "name": "since",
-              "value": "yesterday"
-            },
-            {
-              "name": "access_token",
-              "value": "EAANrFu3KNSoBRNhzRx7z7RR04Lm4MZAaUDdeAS8dhawDofNQ3EBiD98ZAie9ddPzOqlAqGJX0AMr8RhooHBIHs21QzD2VIr07Loc8pKBaYnAR8WxzZA4og3z3A3Js8F9eoip23LsjKINv55qtliQFggXyLfZCyGyAanl8hNTk4sZBYQKqNVzPL14RkdVDMfkwvAPxQsPdjc5b5ZATq00MyMVXxSUpDOZAFZCJlJOYQy8F1CNg5AF4DmWGk3pSAZDZD"
+
+            const SafeIcon = ({ name, className = "w-5 h-5", color = "currentColor" }) => {
+                const ref = useRef(null);
+                useEffect(() => {
+                    if (ref.current && window.lucide) {
+                        ref.current.innerHTML = `<i data-lucide="${name}"></i>`;
+                        window.lucide.createIcons({ node: ref.current, attrs: { class: className, stroke: color, "stroke-width": 2 } });
+                    }
+                }, [name, className, color]);
+                return <span ref={ref} className="inline-flex items-center justify-center pointer-events-none" />;
+            };
+
+            function App() {
+                const [brand, setBrand] = useState('BB');
+                const [activeTab, setActiveTab] = useState('dashboard');
+                const [orders, setOrders] = useState([]);
+                const [user, setUser] = useState(null);
+                const [editingId, setEditingId] = useState(null);
+                const [psidInput, setPsidInput] = useState('');
+                const [isProcessing, setIsProcessing] = useState(false);
+
+                const theme = useMemo(() => brand === 'BB' ? 
+                    { primary: '#f0abfc', text: 'BB STORE', table: 'bb_orders_master', icon: 'stars' } : 
+                    { primary: '#fed7aa', text: 'SINGTO', table: 'st_orders_master', icon: 'cat' }, [brand]);
+
+                useEffect(() => {
+                    const auth = firebase.auth();
+                    const init = async () => {
+                        try {
+                            if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+                                await auth.signInWithCustomToken(window.__initial_auth_token);
+                            } else if (firebase.apps.length && firebase.app().options.apiKey) { 
+                                await auth.signInAnonymously(); 
+                            }
+                        } catch (e) { console.error(e); }
+                    };
+                    init();
+                    return auth.onAuthStateChanged(u => setUser(u));
+                }, []);
+
+                useEffect(() => {
+                    if (!user) return;
+                    const db = firebase.firestore();
+                    return db.collection('artifacts').doc(appId).collection('public').doc('data').collection(theme.table)
+                        .onSnapshot(snap => {
+                            const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                            setOrders(data.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0)));
+                        }, err => console.error("Snapshot Error", err));
+                }, [user, theme.table]);
+
+                const handleFileUpload = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = async (ev) => {
+                        setIsProcessing(true);
+                        const rows = ev.target.result.split('\n').map(r => r.split(','));
+                        const db = firebase.firestore().collection('artifacts').doc(appId).collection('public').doc('data').collection(theme.table);
+                        for (const row of rows.slice(1)) {
+                            if (row[0]) {
+                                await db.add({
+                                    tracking_number: row[0].trim(),
+                                    phone_number: row[1]?.trim() || '',
+                                    recipient_name: row[2]?.trim() || 'Customer',
+                                    cod_amount: row[3]?.trim() || 0,
+                                    strike_status: 'pending',
+                                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                            }
+                        }
+                        setIsProcessing(false);
+                        e.target.value = null;
+                    };
+                    reader.readAsText(file);
+                };
+
+                const lockPsid = async (id) => {
+                    if (!psidInput.trim()) return;
+                    await firebase.firestore().collection('artifacts').doc(appId).collection('public').doc('data').collection(theme.table).doc(id)
+                        .update({ psid: psidInput.trim(), strike_status: 'ready', updated_at: firebase.firestore.FieldValue.serverTimestamp() });
+                    setEditingId(null); setPsidInput('');
+                };
+
+                const deleteOrder = async (id) => {
+                    await firebase.firestore().collection('artifacts').doc(appId).collection('public').doc('data').collection(theme.table).doc(id).delete();
+                };
+
+                if (!firebase.apps.length || !firebase.app().options.apiKey || firebase.app().options.apiKey.includes("วาง")) {
+                    return <div className="min-h-screen bg-black flex items-center justify-center p-8 text-center font-black uppercase">
+                        <div className="glass max-w-lg w-full p-12 border-red-500/40">
+                            <SafeIcon name="shield-alert" className="w-20 h-20 text-red-500 mb-8" />
+                            <h2 className="text-3xl mb-4 text-white italic tracking-tighter">System Standby</h2>
+                            <p className="text-white/40 text-[10px] tracking-[0.3em]">Commander! วาง API Key ในบรรทัดที่ 42 เพื่อเริ่มสงครามครับ</p>
+                        </div>
+                    </div>;
+                }
+
+                return (
+                    <div className="relative min-h-screen pb-20 overflow-x-hidden selection:bg-purple-500/30">
+                        <div className="nebula" style={{ background: `radial-gradient(circle at 50% 50%, ${brand === 'BB' ? 'rgba(147,51,234,0.15)' : 'rgba(234,88,12,0.12)'}, transparent 70%)` }} />
+                        <nav className="sticky top-0 z-50 p-4 border-b border-white/5 bg-black/40 backdrop-blur-3xl flex justify-between items-center px-6 md:px-12 shadow-2xl">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10" style={{color: theme.primary}}><SafeIcon name={theme.icon} className="w-6 h-6" /></div>
+                                <span className="font-black uppercase tracking-tighter text-xl matrix-text italic" style={{color: theme.primary}}>{theme.text} COMMAND</span>
+                            </div>
+                            <div className="flex gap-4 items-center">
+                                <button onClick={() => setBrand(brand === 'BB' ? 'SINGTO' : 'BB')} className="p-2 text-white/20 hover:text-white transition-all scale-110 active:rotate-180 duration-500"><SafeIcon name="refresh-cw" className="w-5 h-5" /></button>
+                                <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
+                                    <button onClick={() => setActiveTab('dashboard')} className={`px-5 py-2 rounded-lg text-xs font-black transition-all ${activeTab === 'dashboard' ? 'bg-white text-black shadow-lg' : 'text-white/30'}`}>DASHBOARD</button>
+                                    <button onClick={() => setActiveTab('vault')} className={`px-5 py-2 rounded-lg text-xs font-black transition-all ${activeTab === 'vault' ? 'bg-white text-black shadow-lg' : 'text-white/30'}`}>VAULT</button>
+                                </div>
+                            </div>
+                        </nav>
+
+                        <main className="relative z-10 p-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+                            <div className="lg:col-span-4 space-y-6 font-black uppercase italic">
+                                <div className="glass p-8 grid grid-cols-2 gap-4 border-b-4 shadow-2xl" style={{borderBottomColor: theme.primary}}>
+                                    <div><span className="text-[10px] opacity-30 tracking-widest block mb-1">Revenue</span><div className="text-3xl tracking-tighter">฿{orders.reduce((s,o)=>s+(Number(o.cod_amount)||0),0).toLocaleString()}</div></div>
+                                    <div><span className="text-[10px] opacity-30 tracking-widest block mb-1">Assets</span><div className="text-3xl tracking-tighter">{orders.length}</div></div>
+                                </div>
+                                <div className="glass p-8 border-l-8 border-green-500 shadow-2xl flex justify-between items-center">
+                                    <div><span className="text-[10px] opacity-30 block">Protocol Status</span><div className="text-2xl mt-1">V.86 STABLE</div></div>
+                                    <SafeIcon name="shield-check" className="w-10 h-10 text-green-500 opacity-20" />
+                                </div>
+                            </div>
+
+                            <div className="lg:col-span-8">
+                                {activeTab === 'dashboard' ? (
+                                    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-700">
+                                        <div className="glass p-32 border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-8 group hover:border-white/20 transition-all cursor-pointer relative overflow-hidden shadow-3xl">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent pointer-events-none"></div>
+                                            <SafeIcon name="upload-cloud" className={`w-20 h-20 opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ${isProcessing ? 'animate-bounce text-green-400' : ''}`} color="white" />
+                                            <div className="text-center font-black uppercase">
+                                                <h3 className="text-4xl italic tracking-tighter relative z-10">{isProcessing ? 'Arming System...' : 'Inject Payload'}</h3>
+                                                <p className="text-[10px] tracking-[0.4em] opacity-20 mt-4 italic">Drop CSV to arm the matrix</p>
+                                            </div>
+                                            <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileUpload} />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="glass p-10 min-h-[800px] border border-white/5 animate-in fade-in duration-1000 shadow-3xl">
+                                        <div className="flex justify-between items-end mb-16 border-b border-white/5 pb-10">
+                                            <div className="space-y-2">
+                                                <h2 className="text-7xl font-black uppercase italic tracking-tighter matrix-text" style={{color: theme.primary}}>Shadow Vault</h2>
+                                                <p className="text-[10px] font-black tracking-[0.6em] opacity-20 uppercase italic">Authorized Commander Access Only</p>
+                                            </div>
+                                            <span className="text-red-500 text-[11px] font-black bg-red-500/10 px-8 py-3 rounded-full border border-red-500/20 animate-pulse">LOCKED TARGETS: {orders.filter(o=>!o.psid).length}</span>
+                                        </div>
+                                        <div className="space-y-6">
+                                            {orders.length === 0 ? (
+                                                <div className="text-center py-40 opacity-10 font-black uppercase italic text-2xl tracking-tighter">No incoming signal...</div>
+                                            ) : (
+                                                orders.map(order => (
+                                                    <div key={order.id} className={`p-8 rounded-3xl border transition-all duration-500 ${!order.psid ? 'bg-red-900/10 border-red-500/30 radar-pulse shadow-[0_0_50px_rgba(239,68,68,0.1)]' : 'bg-white/[0.02] border-white/10 hover:border-white/30'}`}>
+                                                        <div className="flex justify-between items-start mb-10 font-black uppercase italic">
+                                                            <div>
+                                                                <div className="text-4xl drop-shadow-lg text-white tracking-tighter">{order.recipient_name}</div>
+                                                                <div className="flex gap-6 mt-3 font-mono opacity-30 text-[11px] tracking-widest not-italic">Hash: {order.tracking_number} | Phone: {order.phone_number}</div>
+                                                            </div>
+                                                            <div className={`px-5 py-2 rounded-full text-[10px] tracking-widest shadow-2xl ${order.psid ? 'bg-green-500 text-black shadow-green-500/20' : 'bg-red-500 text-white animate-pulse shadow-red-500/20'}`}>{order.psid ? 'LOCKED-ON' : 'NO SIGNAL'}</div>
+                                                        </div>
+                                                        <div className="bg-black/60 p-8 rounded-2xl border border-white/5 shadow-inner flex items-center gap-4 group">
+                                                            <div className="flex-1">
+                                                                <span className="text-[10px] font-black uppercase opacity-20 block mb-4 italic tracking-[0.4em]">Target ID Injection Zone</span>
+                                                                {editingId === order.id || !order.psid ? (
+                                                                    <div className="flex gap-3 animate-in zoom-in-95">
+                                                                        <input autoFocus value={psidInput} onChange={e => setPsidInput(e.target.value)} placeholder="PASTE PSID..." className="flex-1 bg-transparent border-b-2 border-white/10 px-4 py-4 text-2xl font-mono text-white outline-none focus:border-purple-500 transition-all placeholder:opacity-10" onKeyPress={e => e.key === 'Enter' && lockPsid(order.id)} />
+                                                                        <button onClick={() => lockPsid(order.id)} className="px-12 bg-white text-black font-black uppercase rounded-2xl hover:scale-105 active:scale-95 transition-all text-xs shadow-[0_0_30px_#fff]">Execute</button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="flex items-center justify-between group/edit">
+                                                                        <span className="text-3xl font-mono text-white/80 tracking-widest font-bold">{order.psid}</span>
+                                                                        <button onClick={() => {setEditingId(order.id); setPsidInput(order.psid || '');}} className="opacity-0 group-hover/edit:opacity-100 p-4 transition-all text-white/20 hover:text-white bg-white/5 rounded-2xl"><SafeIcon name="edit-3" className="w-5 h-5" /></button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <button onClick={() => deleteOrder(order.id)} className="p-4 text-white/10 hover:text-red-500 transition-all scale-110 active:scale-90"><SafeIcon name="trash-2" className="w-6 h-6" /></button>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </main>
+
+                        <footer className="fixed bottom-0 w-full h-12 border-t border-white/5 bg-black/90 backdrop-blur-3xl z-50 flex items-center overflow-hidden">
+                            <div className="flex items-center gap-24 whitespace-nowrap animate-ticker px-12 text-white/40 font-black uppercase text-[11px] italic tracking-[0.6em]">
+                                {[1,2,3,4,5].map(i => (
+                                    <div key={i} className="flex items-center gap-12">
+                                        <span className="text-purple-400 matrix-text">SHADOW PROTOCOL // V.86 ACTIVE // LIVE SIGNAL // {brand} EMPIRE</span>
+                                        <SafeIcon name="zap" className="w-4 h-4" color="#facc15" />
+                                        <span>REVENUE: ฿{orders.reduce((s,o)=>s+(Number(o.cod_amount)||0),0).toLocaleString()} | ARMED ASSETS: {orders.length}</span>
+                                        <SafeIcon name="shield-check" className="w-4 h-4" color="#22c55e" />
+                                    </div>
+                                ))}
+                            </div>
+                        </footer>
+                    </div>
+                );
             }
-          ]
-        }
-      },
-      "id": "fb-fetch-1",
-      "name": "FB สิงโต 🦁 (สอยเฉพาะเมื่อวาน)",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        350,
-        150
-      ]
-    },
-    {
-      "parameters": {
-        "url": "https://graph.facebook.com/v21.0/113923148350742/conversations",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "fields",
-              "value": "messages{message,from,created_time},labels,is_starred"
-            },
-            {
-              "name": "limit",
-              "value": "250"
-            },
-            {
-              "name": "since",
-              "value": "yesterday"
-            },
-            {
-              "name": "access_token",
-              "value": "EAANrFu3KNSoBRGVPs7N3ZApuQcqu7QvFQS78ydlDyvf0W9rZBVWPB1uxXbsZC1Ut5iRzYZBr7tywPDvZCqTlKWpGnO6ZA2ryZBAFzPqyxZCD9ayPReORF6vxc1DcZARYahiOLugOtH72XyZAJxUmTwcN5kSBv4mFLgKxlcxE3dD8BGr09KK8STL3eiZAMn0LYHK1TnBT4RBV3mHGZC858d1jvvfqIVfQ9kfJteViUYhSeZB6f9aSz9lUULHYy5uhKLRy7iZCHBoHz0l8abp8CMbKDmZBZBOd0Uxmbm0L"
-            }
-          ]
-        }
-      },
-      "id": "fb-fetch-2",
-      "name": "FB บีบี 💜 (สอยเฉพาะเมื่อวาน)",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        350,
-        350
-      ]
-    },
-    {
-      "parameters": {
-        "jsCode": "/**\n * 🔪 THE CHOPPER V31.61: TITAN AWAKENING\n * ยุทธศาสตร์: สกัดพิกัด และระบุตารางเป้าหมายแยกตามแบรนด์\n */\nconst items = $input.all();\nconst resultsMap = new Map(); \n\nfor (const item of items) {\n    const rawResponse = item.json;\n    const conversations = rawResponse.data || (rawResponse.messages ? [rawResponse] : []);\n    \n    // 🚩 ระบุ Identity จากการเรียก API (ใช้พิกัด URL เป็นตัวจำแนก)\n    let targetTable = \"st_order\"; \n    if (item.pairedItem?.node === \"FB บีบี 💜 (สอยเฉพาะเมื่อวาน)\") targetTable = \"orders\";\n\n    for (const conv of conversations) {\n        const messages = conv.messages?.data || [];\n        for (const msg of messages) {\n            const text = (msg.message || \"\").trim();\n            if (text.includes(\"ขอบคุณ\") || text.length < 5) continue;\n\n            const phoneMatch = text.match(/0\\d{1,2}-?\\d{3}-?\\d{3,4}/) || text.match(/\\b0\\d{9}\\b/);\n            if (phoneMatch) {\n                const phone = phoneMatch[0].replace(/[^\\d]/g, '').replace(/^66/, '0');\n                \n                // 💰 สกัดพิกัดยอดเงิน\n                const priceMatch = text.match(/(?:ยอด|COD|ราคา|จ่าย|ครี)\\s*[:=-]?\\s*([\\d,.]+)/i);\n                let price = priceMatch ? parseFloat(priceMatch[1].replace(/,/g, '')) : 0;\n\n                if (phone.length >= 9) {\n                    resultsMap.set(phone, {\n                        json: {\n                            target_table: targetTable,\n                            phone_number: String(phone),\n                            recipient_name: String(msg.from?.name || \"ลูกค้า VVIP\"),\n                            cod_amount: Number(price),\n                            status: \"Yesterday_Strike\",\n                            created_at: msg.created_time || new Date().toISOString()\n                        }\n                    });\n                }\n            }\n        }\n    }\n}\nreturn Array.from(resultsMap.values());"
-      },
-      "id": "code-chopper",
-      "name": "The Chopper V31.61",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        600,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "=https://nlgecesyjcrrqwiitlyt.supabase.co/rest/v1/{{ $json.target_table }}?on_conflict=phone_number",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "apikey", "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZ2VjZXN5amNycnF3aWl0bHl0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDE3OTA3OSwiZXhwIjoyMDg5NzU1MDc5fQ.hR2g1HDcT47bBz-jqdyvC946EzPEloQOuIgQqTcOPNM" },
-            { "name": "Authorization", "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5sZ2VjZXN5amNycnF3aWl0bHl0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDE3OTA3OSwiZXhwIjoyMDg5NzU1MDc5fQ.hR2g1HDcT47bBz-jqdyvC946EzPEloQOuIgQqTcOPNM" },
-            { "name": "Content-Type", "value": "application/json" },
-            { "name": "Prefer", "value": "resolution=merge-duplicates" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"phone_number\": \"{{ $json.phone_number }}\",\n  \"recipient_name\": \"{{ $json.recipient_name }}\",\n  \"cod_amount\": {{ $json.cod_amount }},\n  \"status\": \"{{ $json.status }}\",\n  \"created_at\": \"{{ $json.created_at }}\"\n}",
-        "options": {}
-      },
-      "id": "supabase-titan-sync",
-      "name": "Supabase Titan Sync",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        850,
-        300
-      ]
-    }
-  ],
-  "connections": {
-    "schedule-trigger": {
-      "main": [
-        [
-          {
-            "node": "fb-fetch-1",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "fb-fetch-2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "fb-fetch-1": {
-      "main": [
-        [
-          {
-            "node": "code-chopper",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "fb-fetch-2": {
-      "main": [
-        [
-          {
-            "node": "code-chopper",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "code-chopper": {
-      "main": [
-        [
-          {
-            "node": "supabase-titan-sync",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
-  }
-}
+
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<App />);
+        })(); // End IIFE
+    </script>
+</body>
+</html>
